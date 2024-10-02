@@ -9,6 +9,9 @@ var config = {
     PORT: process.env.PORT || 3000,
     HOST: process.env.HOST || "localhost",
     TOKEN: process.env.TOKEN || "secrettokenhere",
+    SERVE_ASSETS: process.env.SERVE_ASSETS || "true",
+    ASSERTS_PATH: process.env.ASSERTS_PATH || "public",
+    NONEXPIRING_TOKENS: process.env.NONEXPIRING_TOKENS || null,
 };
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -43,10 +46,12 @@ app.use(function (req, res, next) {
 });
 
 ////////////////    public asset    //////////////////
-app.use("/public", express.static("public"));
-app.use("/public", function (req, res) {
-    res.status(404).send("Not Found");
-});
+if (config.SERVE_ASSETS == "true") {
+    app.use("/public", express.static("public"));
+    app.use("/public", function (req, res) {
+        res.status(404).send("Not Found");
+    });
+}
 
 ////////////////    auth    //////////////////
 const router = require("./routes/auth");
@@ -56,13 +61,26 @@ app.use(function (req, res, next) {
     if (!token) {
         res.status(401).send("Unauthorized");
     } else {
-        jwt.verify(token.split(" ")[1], config.TOKEN, function (err, decoded) {
-            if (err) {
-                res.status(401).send("Unauthorized");
-            } else {
-                next();
-            }
-        });
+        if (
+            token &&
+            config.NONEXPIRING_TOKENS &&
+            token == config.NONEXPIRING_TOKENS
+        ) {
+            next();
+            return;
+        } else {
+            jwt.verify(
+                token.split(" ")[1],
+                config.TOKEN,
+                function (err, decoded) {
+                    if (err) {
+                        res.status(401).send("Unauthorized");
+                    } else {
+                        next();
+                    }
+                }
+            );
+        }
     }
 });
 
