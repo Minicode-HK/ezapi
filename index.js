@@ -1,4 +1,5 @@
 var http = require("http");
+var cors = require("cors");
 var express = require("express");
 var jwt = require("jsonwebtoken");
 
@@ -19,6 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", function (req, res) {
     res.send("Hello World");
 });
+
+////////////////    CORS    //////////////////
+app.use(cors());
 
 ////////////////    ignored route    //////////////////
 const ignoredRoutes = [
@@ -67,7 +71,6 @@ app.use(function (req, res, next) {
             token == config.NONEXPIRING_TOKENS
         ) {
             next();
-            return;
         } else {
             jwt.verify(
                 token.split(" ")[1],
@@ -97,6 +100,7 @@ app.use("/:module", function (req, res, next) {
         }
         module = routes(module, inMemoryDatabase[module]);
     } catch (error) {
+        console.log("error", error);
         res.status(404).send("Module not found");
     }
     module(req, res, next);
