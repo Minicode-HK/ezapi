@@ -109,7 +109,6 @@ app.use("/:module", function (req, res, next) {
                 inMemoryDatabase[module]
             );
         } catch (error) {
-            console.log("error", error);
             var handler = null;
         }
         module = routes(module, inMemoryDatabase[module], handler);
