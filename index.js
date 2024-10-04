@@ -87,12 +87,6 @@ app.use(function (req, res, next) {
     }
 });
 
-////////////////    reset database    //////////////////
-app.post("/reset", function (req, res) {
-    inMemoryDatabase = {};
-    res.send("Database reset");
-});
-
 ////////////////    dynamic module    //////////////////
 var routes = require("./routes/base");
 var inMemoryDatabase = {};
