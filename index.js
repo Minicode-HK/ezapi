@@ -104,7 +104,15 @@ app.use("/:module", function (req, res, next) {
         if (!inMemoryDatabase[module]) {
             inMemoryDatabase[module] = require(`./data/${module}.json`);
         }
-        module = routes(module, inMemoryDatabase[module]);
+        try {
+            var handler = require(`./routes/${module}`)(
+                inMemoryDatabase[module]
+            );
+        } catch (error) {
+            console.log("error", error);
+            var handler = null;
+        }
+        module = routes(module, inMemoryDatabase[module], handler);
     } catch (error) {
         console.log("error", error);
         res.status(404).send("Module not found");

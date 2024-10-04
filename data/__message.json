@@ -1,0 +1,25 @@
+[
+    {
+        "id": 1,
+        "data": [
+            {
+                "id": 1,
+                "message": "Hello World",
+                "from": "admin",
+                "time": "12:00"
+            },
+            {
+                "id": 2,
+                "message": "Hello World 2",
+                "from": "admin",
+                "time": "12:01"
+            },
+            {
+                "id": 3,
+                "message": "Hello World 3",
+                "from": "user",
+                "time": "12:02"
+            }
+        ]
+    }
+]

@@ -1,7 +1,7 @@
 const { randomUUID } = require("crypto");
 const express = require("express");
 
-function routes(MODEL_NAME, inMemoryDatabase) {
+function routes(MODEL_NAME, inMemoryDatabase, handler) {
     const router = express.Router();
 
     router.get("/", function (req, res) {
@@ -19,13 +19,17 @@ function routes(MODEL_NAME, inMemoryDatabase) {
     });
 
     router.post("/", function (req, res) {
-        var model = {
-            ...req.body,
-            id: randomUUID(),
-            i_number: inMemoryDatabase.length,
-        };
-        inMemoryDatabase.push(model);
-        res.send(model);
+        if (handler && handler.POST) {
+            handler.POST(req, res);
+        } else {
+            var model = {
+                ...req.body,
+                id: randomUUID(),
+                i_number: inMemoryDatabase.length,
+            };
+            inMemoryDatabase.push(model);
+            res.send(model);
+        }
     });
 
     router.put("/:id", function (req, res) {
