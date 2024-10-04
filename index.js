@@ -68,7 +68,7 @@ app.use(function (req, res, next) {
         if (
             token &&
             config.NONEXPIRING_TOKENS &&
-            token == config.NONEXPIRING_TOKENS
+            token.split(" ")[1] == config.NONEXPIRING_TOKENS
         ) {
             next();
         } else {
@@ -85,6 +85,12 @@ app.use(function (req, res, next) {
             );
         }
     }
+});
+
+////////////////    reset database    //////////////////
+app.post("/reset", function (req, res) {
+    inMemoryDatabase = {};
+    res.send("Database reset");
 });
 
 ////////////////    dynamic module    //////////////////
