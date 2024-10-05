@@ -1,23 +1,54 @@
 [
     {
         "id": 1,
+        "client": [
+            "admin",
+            "user"
+        ],
         "data": [
             {
                 "id": 1,
-                "message": "Hello World",
+                "message": "Hello, I am Ken Lee",
                 "from": "admin",
                 "time": "12:00"
             },
             {
                 "id": 2,
-                "message": "Hello World 2",
+                "message": "What can I help you with today?",
                 "from": "admin",
                 "time": "12:01"
             },
             {
                 "id": 3,
-                "message": "Hello World 3",
+                "message": "I am interested in the porsche 911. Can you provide more details?",
                 "from": "user",
+                "time": "12:02"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "client": [
+            "admin",
+            "user2"
+        ],
+        "data": [
+            {
+                "id": 1,
+                "message": "Hello, I am Ken Lee",
+                "from": "admin",
+                "time": "12:00"
+            },
+            {
+                "id": 2,
+                "message": "What can I help you with today?",
+                "from": "admin",
+                "time": "12:01"
+            },
+            {
+                "id": 3,
+                "message": "Can you help me with the insurance plan",
+                "from": "user2",
                 "time": "12:02"
             }
         ]

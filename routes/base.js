@@ -5,7 +5,11 @@ function routes(MODEL_NAME, inMemoryDatabase, handler) {
     const router = express.Router();
 
     router.get("/", function (req, res) {
-        res.send(inMemoryDatabase);
+        if (handler && handler.GET) {
+            handler.GET(req, res);
+        } else {
+            res.send(inMemoryDatabase);
+        }
     });
 
     router.get("/:id", function (req, res) {

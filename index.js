@@ -12,6 +12,7 @@ var config = {
     ASSERTS_PATH: process.env.ASSERTS_PATH || "public",
     NONEXPIRING_TOKENS: process.env.NONEXPIRING_TOKENS || null,
 };
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -90,6 +91,11 @@ app.use(function (req, res, next) {
 var routes = require("./routes/base");
 var inMemoryDatabase = {};
 
+// Some route might need to work with other module data
+const moduleDependencies = {
+    newmessage: ["__message"],
+};
+
 // the module will be dynamically loaded when the route is accessed
 app.use("/:module", function (req, res, next) {
     var module = req.params.module;
@@ -98,8 +104,19 @@ app.use("/:module", function (req, res, next) {
             inMemoryDatabase[module] = require(`./data/${module}.json`);
         }
         try {
+            const dependencies = {};
+            if (moduleDependencies[module]) {
+                moduleDependencies[module].forEach((dependency) => {
+                    var dependencyData = inMemoryDatabase[dependency];
+                    if (!dependencyData) {
+                        dependencyData = require(`./data/${dependency}.json`);
+                    }
+                    dependencies[dependency] = dependencyData;
+                });
+            }
             var handler = require(`./routes/${module}`)(
-                inMemoryDatabase[module]
+                inMemoryDatabase[module],
+                dependencies
             );
         } catch (error) {
             var handler = null;
