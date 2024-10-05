@@ -1,10 +1,8 @@
-var http = require("http");
 var cors = require("cors");
 var express = require("express");
 var jwt = require("jsonwebtoken");
 
 var app = express();
-var server = http.createServer(app);
 
 var config = {
     PORT: process.env.PORT || 3000,
@@ -77,6 +75,7 @@ app.use(function (req, res, next) {
                 config.TOKEN,
                 function (err, decoded) {
                     if (err) {
+                        console.log("err", err);
                         res.status(401).send("Unauthorized");
                     } else {
                         next();
@@ -113,7 +112,7 @@ app.use("/:module", function (req, res, next) {
     module(req, res, next);
 });
 
-server.listen(config.PORT, function () {
+app.listen(config.PORT, function () {
     console.log(`Server is running on port ${config.PORT}`);
     console.log(`http://${config.HOST}:${config.PORT}`);
 });
