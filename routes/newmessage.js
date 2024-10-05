@@ -3,7 +3,6 @@ const router = express.Router();
 
 function route(inMemoryDatabase, dependencies) {
     function GET(req, res) {
-        console.log(dependencies);
         const chat = dependencies["__message"];
         const newMessage = chat.map((element) => {
             return {
